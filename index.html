@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="en">
+	<head class="html5">
+		<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+
+		<title>Simple IIIF Interactive Transcript - TextAV</title>
+
+		<link type="text/css" rel="stylesheet" href="./css/normalize.css">
+		<link type="text/css" rel="stylesheet" href="./css/style.css">
+
+		<script type="text/javascript" src="./js/includes/jquery-2.2.1.min.js"></script>
+
+		<script type="text/javascript" src="./js/custom/main.js"></script>
+		<script type="text/javascript" src="./js/custom/parser.js"></script>
+
+		<!--
+			[if lt IE 9]>
+			<script src="http://html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+			<![endif]
+		-->
+
+	</head>
+	<body>
+		
+		<div class="container">
+			<h2>Simple IIIF Interactive Transcript - BBC TextAV</h2>
+			<div class="inputContainer">
+				<input type="text" name="manifestInput" id="manifestInput"/>
+				<button id="parseManifestButton">Parse Manifest</button>
+				<button id="viewManifestButton">View Manifest</button>
+			</div>
+
+			<div class="metaContainer">
+				<div class="title">Title</div>
+				<div class="description">Description</div>
+			</div>
+
+			<div class="videoContainer">
+				<video controls src="https://static.p.core.cdn.streamfarm.net/1000153copo/ondemand/145293313/7174462/7174462_h264_1920_1080_5000kb_baseline_de_5000.mp4"></video>
+				<div class="transcriptContainer">
+					<div id="transcript">
+						<p></p>
+					</div>
+				</div>
+			</div>
+
+		</div>
+	</body>
+</html>
