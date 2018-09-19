@@ -4,8 +4,14 @@ var annotations = [];
 
 $(document).ready( function() {
 
+	$('#manifestInput').val('https://tomcrane.github.io/bbctextav/iiif/ID191002001.json');
+
 	$('video').on('loadedmetadata', function() {
-		//initVideo();
+		initVideo();
+	});
+
+	$('#transcript').on('click', 'span', function() {
+		$('video')[0].currentTime = $(this).data('start');
 	});
 
 	$('#viewManifestButton').click(function() {
@@ -19,29 +25,37 @@ $(document).ready( function() {
 
 		var manifestURL = $('#manifestInput').val();
 
-		parseManifestData(manifestURL, function() {
+		getJSONData(manifestURL, function() {
 		
 			var data = this;
 
-			$('.title').text(data.label);
-			$('.description').text(data.description);
+			$('.title').text(data.label.de);
 
-			var canvasItems = [];
-			if (Array.isArray(data.sequences)) {
-				canvasItems = data.sequences[0].canvases;
-			} else if (data.type == 'Canvas') {
-				canvasItems.push(data);
-			} else {
-				canvasItems = data.sequences.canvases;
-			}
+			var videoSrc = data.items[0].items[0].items[0].body.id;
+			$('video').attr('src', videoSrc);
+			$('video').load();
 
-			canvasInstances = [];
+			getJSONData(data.items[0].annotations.id, function() {
 
-			for (var i=0; i<canvasItems.length; i++) {
-				initCanvas(canvasItems[i]);
-			}
+				annotations = this;
 
+				for (var i=0; i<annotations.length; i++) {
 
+					var transcriptItem = $('<span class="timebased" data-start="0" data-end="1"></span>');
+
+					transcriptItem.text('TEXT');
+
+					$('#transcript').append(transcriptItem);
+
+				}
+			}, function() {
+
+				$('.title').text('ERROR: Could not load annotation data.');
+				$('.description').text('');
+				console.log('ERROR: Could not load annotation data.', this);
+
+			});
+			
 		}, function() {
 			
 			$('.title').text('ERROR: Could not load manifest data.');
@@ -60,6 +74,26 @@ function initVideo() {
 	});
 
 	initTranscript();
+}
+
+function getJSONData(dataURL, successCallback, errorCallback) {
+	
+	$.ajax({
+		type: 'GET',
+		url: dataURL,
+		cache: false,
+		dataType: 'json',
+		mimeType: 'application/json' 
+	}).done(function(response) {
+		
+		if (successCallback) successCallback.call(response);
+
+	}).fail(function(response) {
+
+		if (errorCallback) errorCallback.call(response);
+
+	});
+
 }
 
 function updateMediaActiveStates(time) {
@@ -143,6 +177,7 @@ function updateScrolling() {
 }
 
 function clearCanvases() {
-	$('.videoContainer').empty();
+	$('video').attr('src', '');
+	$('#transcript').empty();
 
 }

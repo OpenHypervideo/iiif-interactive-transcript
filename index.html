@@ -5,23 +5,16 @@
 
 		<title>Simple IIIF Interactive Transcript - TextAV</title>
 
-		<link type="text/css" rel="stylesheet" href="./css/normalize.css">
-		<link type="text/css" rel="stylesheet" href="./css/style.css">
+		<link type="text/css" rel="stylesheet" href="./css/normalize.css"/>
+		<link type="text/css" rel="stylesheet" href="./css/style.css"/>
 
 		<script type="text/javascript" src="./js/includes/jquery-2.2.1.min.js"></script>
-
 		<script type="text/javascript" src="./js/custom/main.js"></script>
-		<script type="text/javascript" src="./js/custom/parser.js"></script>
-
-		<!--
-			[if lt IE 9]>
-			<script src="http://html5shiv.googlecode.com/svn/trunk/html5.js"></script>
-			<![endif]
-		-->
-
 	</head>
 	<body>
 		
+		<a target="_blank" href="https://github.com/OpenHypervideo/iiif-interactive-transcript"><img style="position: absolute; top: 0; right: 0; border: 0; width: 120px;" src="https://s3.amazonaws.com/github/ribbons/forkme_right_darkblue_121621.png" alt="Fork me on GitHub"></a>
+
 		<div class="container">
 			<h2>Simple IIIF Interactive Transcript - BBC TextAV</h2>
 			<div class="inputContainer">
@@ -30,17 +23,17 @@
 				<button id="viewManifestButton">View Manifest</button>
 			</div>
 
+			<hr/>
+
 			<div class="metaContainer">
-				<div class="title">Title</div>
-				<div class="description">Description</div>
+				<div class="title"></div>
+				<div class="description"></div>
 			</div>
 
 			<div class="videoContainer">
-				<video controls src="https://static.p.core.cdn.streamfarm.net/1000153copo/ondemand/145293313/7174462/7174462_h264_1920_1080_5000kb_baseline_de_5000.mp4"></video>
+				<video controls="controls" preload="auto"></video>
 				<div class="transcriptContainer">
-					<div id="transcript">
-						<p></p>
-					</div>
+					<div id="transcript"></div>
 				</div>
 			</div>
 
