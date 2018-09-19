@@ -56,6 +56,7 @@ input[type="text"] {
 	height: 100%;
 	background: #fff;
 	overflow: auto;
+	font-size: 12px;
 }
 
 .videoContainer .transcriptContainer #transcript {
@@ -66,11 +67,12 @@ input[type="text"] {
 	display: block;
 	border-bottom: 1px solid #999;
 	background: #fff;
-	padding: 1px 2px;
+	padding: 10px 6px 0px 6px;
+	cursor: pointer;
 }
 
 #transcript .timebased.active, #transcript .timebased:hover {
-	background: #efefef;
+	font-weight: bold;
 }
 
 #transcript .timebased .timings {
