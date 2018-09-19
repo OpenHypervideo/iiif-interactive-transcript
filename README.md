@@ -2,7 +2,7 @@
 
 ---
 
-This is a [BBC TextAV](textav.tech) prototype.
+[BBC TextAV](http://textav.tech) prototype.
 
 ### Contributors
 
