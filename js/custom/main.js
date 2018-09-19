@@ -5,6 +5,8 @@ var annotations = [];
 
 $(document).ready( function() {
 
+	getRandomManifestFromCollection('https://tomcrane.github.io/bbctextav/iiif/collection.json');
+
 	$('#manifestInput').val('https://tomcrane.github.io/bbctextav/iiif/ID191002001.json');
 
 	$('video').on('loadedmetadata', function() {
@@ -24,6 +26,11 @@ $(document).ready( function() {
 	$('#viewManifestButton').click(function() {
 		var absoluteManifestURL = $('#manifestInput').val();
 		window.open(absoluteManifestURL, '_blank', 'location=yes,height=600,width=580,scrollbars=yes,status=yes');
+	});
+
+	$('#getRandomManifestButton').click(function() {
+		getRandomManifestFromCollection('https://tomcrane.github.io/bbctextav/iiif/collection.json');
+		$('#parseManifestButton').click();
 	});
 
 	$('#parseManifestButton').click(function() {
@@ -66,7 +73,9 @@ $(document).ready( function() {
 
 					var transcriptItem = $('<span class="timebased" data-start="'+ startTime +'" data-end="'+ endTime +'"></span>');
 
-					transcriptItem.text(annotations[i].body.value+ ' ');
+					var formattedTimings = formatTime(startTime) +' - '+ formatTime(endTime);
+					transcriptItem.append('<div class="timings">'+ formattedTimings +' </div>');
+					transcriptItem.append('<p>'+ annotations[i].body.value +' </p>');
 
 					$('#transcript').append(transcriptItem);
 
@@ -229,6 +238,18 @@ function updateScrolling() {
     }
 
 }
+
+function getRandomManifestFromCollection(collectionURL) {
+	getJSONData(collectionURL, function() {
+		var manifests = this.items;
+		var randomID = Math.floor(Math.random() * (manifests.length - 0 + 1)) + 0;
+
+		$('#manifestInput').val(manifests[randomID].id);
+
+	}, function() {
+		console.log('Could not retrieve collection');
+	});
+}  
 
 function clearCanvases() {
 	$('video').attr('src', '');
