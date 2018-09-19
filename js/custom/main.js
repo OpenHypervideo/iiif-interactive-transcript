@@ -1,4 +1,5 @@
-var isPlaying;
+var isPlaying,
+	isMouseOver = false;
 
 var annotations = [];
 
@@ -13,6 +14,12 @@ $(document).ready( function() {
 	$('#transcript').on('click', 'span', function() {
 		$('video')[0].currentTime = $(this).data('start');
 	});
+
+	$('#transcript').hover(function() {
+        isMouseOver = true;
+    }, function() {
+        isMouseOver = false;
+    });
 
 	$('#viewManifestButton').click(function() {
 		var absoluteManifestURL = $('#manifestInput').val();
@@ -35,15 +42,31 @@ $(document).ready( function() {
 			$('video').attr('src', videoSrc);
 			$('video').load();
 
-			getJSONData(data.items[0].annotations.id, function() {
+			var duration = data.items[0].duration;
 
-				annotations = this;
+			//console.log(data.items[0].annotations[0].id);
+
+			getJSONData(data.items[0].annotations[0].id, function() {
+
+				annotations = this.items;
 
 				for (var i=0; i<annotations.length; i++) {
 
-					var transcriptItem = $('<span class="timebased" data-start="0" data-end="1"></span>');
+					var temporal = /t=([^&]+)/g.exec(annotations[i].target);
 
-					transcriptItem.text('TEXT');
+					var t;
+					if(temporal && temporal[1]) {
+						t = temporal[1].split(',');
+					} else {
+						t = [0, duration];
+					}
+
+					var startTime = parseFloat(t[0]),
+						endTime = parseFloat(t[1]);
+
+					var transcriptItem = $('<span class="timebased" data-start="'+ startTime +'" data-end="'+ endTime +'"></span>');
+
+					transcriptItem.text(annotations[i].body.value+ ' ');
 
 					$('#transcript').append(transcriptItem);
 
@@ -102,8 +125,12 @@ function updateMediaActiveStates(time) {
 	
 	updateScrolling();
 
+	if (!time) {
+		time = $('video')[0].currentTime;
+	}
 
-	var timelineItems = $('.timelineItem');
+
+	var timelineItems = $('#transcript .timebased');
 
 	timelineItems.each(function() {
 		var currentItem = $(this),
@@ -114,7 +141,6 @@ function updateMediaActiveStates(time) {
 			
 			if (!currentItem.hasClass('active')) {
 				currentItem.addClass('active');
-				//loadTranscriptText(currentItem.attr('data-transcript-source'), 'transcript__original', 'original1')
 			}
 
 		} else {
@@ -166,6 +192,7 @@ function initTranscript(source, target, video) {
 	});
 }
 
+/*
 function updateScrolling() {
     var percentPlayed = $('video')[0].currentTime / $('video')[0].duration * 100;
 
@@ -174,6 +201,33 @@ function updateScrolling() {
     var percentScrolled = (containerScrollHeight-containerHeight) / 100 * percentPlayed;
     var currentScrollTop = $('.transcriptContainer').scrollTop();
     $('.transcriptContainer').stop().animate({scrollTop:percentScrolled}, 500);
+}
+*/
+
+function updateScrolling() {
+                                
+    if (isMouseOver) {
+        return;
+    }
+    
+    var customhtmlContainer = $('.transcriptContainer'),
+        firstActiveElement = customhtmlContainer.find('.timebased.active').eq(0);
+
+
+    if ( firstActiveElement.length == 0 ) {
+        return;
+    }
+
+    var activeElementPosition = firstActiveElement.position();
+
+    if ( activeElementPosition.top <
+        customhtmlContainer.height()/2 + customhtmlContainer.scrollTop()
+        || activeElementPosition.top > customhtmlContainer.height()/2 + customhtmlContainer.scrollTop() ) {
+
+        var newPos = activeElementPosition.top + customhtmlContainer.scrollTop() - customhtmlContainer.height()/2;
+        customhtmlContainer.stop().animate({scrollTop : newPos},400);
+    }
+
 }
 
 function clearCanvases() {

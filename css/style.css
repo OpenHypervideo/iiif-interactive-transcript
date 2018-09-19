@@ -50,13 +50,20 @@ body * {
 	width: 400px;
 	height: 100%;
 	background: #fff;
+	overflow: auto;
 }
 
-
-
 .videoContainer .transcriptContainer #transcript {
-	height: calc(100% - 1em);
-	overflow: auto;
+	height: auto;
+}
+
+#transcript .timebased {
+	background: #efefef;
+	padding: 1px 2px;
+}
+
+#transcript .timebased.active, #transcript .timebased:hover {
+	background: #afafaf;
 }
 
 /*******************
