@@ -5,9 +5,7 @@ var annotations = [];
 
 $(document).ready( function() {
 
-	getRandomManifestFromCollection('https://tomcrane.github.io/bbctextav/iiif/collection.json');
-
-	$('#manifestInput').val('https://tomcrane.github.io/bbctextav/iiif/ID191002001.json');
+	$('#getRandomManifestButton').click();
 
 	$('video').on('loadedmetadata', function() {
 		initVideo();
@@ -29,8 +27,9 @@ $(document).ready( function() {
 	});
 
 	$('#getRandomManifestButton').click(function() {
-		getRandomManifestFromCollection('https://tomcrane.github.io/bbctextav/iiif/collection.json');
-		$('#parseManifestButton').click();
+		getRandomManifestFromCollection('https://tomcrane.github.io/bbctextav/iiif/collection.json', function() {
+			$('#parseManifestButton').click();
+		});
 	});
 
 	$('#parseManifestButton').click(function() {
@@ -234,17 +233,19 @@ function updateScrolling() {
         || activeElementPosition.top > customhtmlContainer.height()/2 + customhtmlContainer.scrollTop() ) {
 
         var newPos = activeElementPosition.top + customhtmlContainer.scrollTop() - customhtmlContainer.height()/2;
-        customhtmlContainer.stop().animate({scrollTop : newPos},400);
+        customhtmlContainer.stop().animate({scrollTop : newPos}, 400);
     }
 
 }
 
-function getRandomManifestFromCollection(collectionURL) {
+function getRandomManifestFromCollection(collectionURL, successCallback) {
 	getJSONData(collectionURL, function() {
 		var manifests = this.items;
 		var randomID = Math.floor(Math.random() * (manifests.length - 0 + 1)) + 0;
 
 		$('#manifestInput').val(manifests[randomID].id);
+
+		if (successCallback) successCallback.call();
 
 	}, function() {
 		console.log('Could not retrieve collection');

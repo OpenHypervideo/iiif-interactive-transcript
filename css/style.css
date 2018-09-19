@@ -9,14 +9,16 @@ body {
 }
 
 body * {
-	transition-property: all;
-	transition-duration: 400ms;
 	box-sizing: border-box;
 }
 
 input[type="text"] {
 	display: block;
 	width: 100%;
+}
+
+.title {
+	font-weight: bold;
 }
 
 .container {
